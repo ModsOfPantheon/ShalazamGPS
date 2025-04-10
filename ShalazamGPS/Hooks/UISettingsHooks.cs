@@ -43,7 +43,7 @@ public class UISettingsHooks
         buttonComp.onClick = new Button.ButtonClickedEvent();
         buttonComp.onClick.AddCall(new InvokableCall(new Action(() =>
         {
-            Application.OpenURL($"https://shalazam.info/maps/1?gps_websocket_url={ModMain.WebsocketAddress}:{ModMain.WebsocketPort}&gps_websocket_interval=100&zoom=8&x={Globals.LocalPlayer!.transform.position.x}&y={Globals.LocalPlayer.transform.position.z}");
+            Application.OpenURL($"https://shalazam.info/maps/1?gps_websocket_url={ModMain.WebsocketAddress}:{ModMain.WebsocketPort}&gps_websocket_interval={ModMain.RefreshInterval}&zoom=8&x={Globals.LocalPlayer!.transform.position.x}&y={Globals.LocalPlayer.transform.position.z}");
         })));
     }
 }

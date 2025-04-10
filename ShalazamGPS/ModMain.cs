@@ -9,6 +9,7 @@ public class ModMain : MelonMod
     private WebSocketServer? _webSocketServer;
     public static string WebsocketAddress;
     public static int WebsocketPort;
+    public static int RefreshInterval;
     
     public const string PluginVersion = "1.0.0";
     
@@ -17,6 +18,7 @@ public class ModMain : MelonMod
         var category = MelonPreferences.CreateCategory("ShalazamGPS");
         WebsocketAddress = category.CreateEntry("WebsocketUrl", "ws://localhost").Value;
         WebsocketPort = category.CreateEntry("SocketPort", 3000).Value;
+        RefreshInterval = category.CreateEntry("RefreshInterval", 100).Value;
         
         category.SaveToFile(false);
         

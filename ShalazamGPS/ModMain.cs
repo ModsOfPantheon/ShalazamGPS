@@ -21,12 +21,15 @@ public class ModMain : MelonMod
         RefreshInterval = category.CreateEntry("RefreshInterval", 100).Value;
         
         category.SaveToFile(false);
-        
+
+        int preferredWebsocketPort = WebsocketPort;
         for (var i = 0; i < 100; i++)
         {
             try
             {
-                _webSocketServer = new WebSocketServer($"{WebsocketAddress}:{WebsocketPort + i}");
+                WebsocketPort = preferredWebsocketPort + i;
+
+                _webSocketServer = new WebSocketServer($"{WebsocketAddress}:{WebsocketPort}");
                 _webSocketServer.AddWebSocketService<WebSocketRequestBehaviour>("/");
                 _webSocketServer.Start();
 

@@ -1,5 +1,6 @@
 ﻿using MelonLoader;
 using ShalazamGPS.Sockets;
+using UnityEngine;
 using WebSocketSharp.Server;
 
 namespace ShalazamGPS;
@@ -49,5 +50,11 @@ public class ModMain : MelonMod
         {
             MelonLogger.Error("Failed to open websocket server :(");
         }
+    }
+
+    public static void OpenGps()
+    {
+        Application.OpenURL(
+            $"https://shalazam.info/maps/1?gps_websocket_url={WebsocketAddress}:{WebsocketPort}&gps_websocket_interval={RefreshInterval}&zoom=8&x={(int)Globals.LocalPlayer!.transform.position.x}&y={(int)Globals.LocalPlayer.transform.position.z}");
     }
 }

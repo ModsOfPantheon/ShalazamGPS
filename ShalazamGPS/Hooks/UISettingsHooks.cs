@@ -1,6 +1,7 @@
 using HarmonyLib;
 using Il2Cpp;
 using Il2CppTMPro;
+using MelonLoader;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -12,6 +13,8 @@ namespace ShalazamGPS.Hooks;
 [HarmonyPatch(nameof(UISettings.Awake))]
 public class UISettingsHooks
 {
+    private const string TabObjectName = "TabPage_Other";
+
     private static void Postfix(UISettings __instance)
     {
         // Fired in char select
@@ -27,8 +30,8 @@ public class UISettingsHooks
         }
         
         Globals.HasSetUpUI = true;
-        
-        var tabOther = __instance.transform.GetChild(9);
+
+        var tabOther = __instance.transform.FindChild(TabObjectName);
         var otherLayoutGroup = tabOther.GetChild(0);
         var spacer = otherLayoutGroup.GetChild(1);
         var resetUiButton = otherLayoutGroup.GetChild(2);

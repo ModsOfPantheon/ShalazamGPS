@@ -8,29 +8,29 @@ namespace ShalazamGPS;
 public class ModMain : MelonMod
 {
     private WebSocketServer? _webSocketServer;
-    public static string WebsocketAddress;
-    public static int WebsocketPort;
-    public static int RefreshInterval;
+    private static string _websocketAddress;
+    private static int _websocketPort;
+    private static int _refreshInterval;
     
-    public const string PluginVersion = "1.0.0";
+    public const string PluginVersion = "1.1.0";
     
     public override void OnInitializeMelon()
     {
         var category = MelonPreferences.CreateCategory("ShalazamGPS");
-        WebsocketAddress = category.CreateEntry("WebsocketUrl", "ws://localhost").Value;
-        WebsocketPort = category.CreateEntry("SocketPort", 3000).Value;
-        RefreshInterval = category.CreateEntry("RefreshInterval", 100).Value;
+        _websocketAddress = category.CreateEntry("WebsocketUrl", "ws://localhost").Value;
+        _websocketPort = category.CreateEntry("SocketPort", 3000).Value;
+        _refreshInterval = category.CreateEntry("RefreshInterval", 100).Value;
         
         category.SaveToFile(false);
 
-        int preferredWebsocketPort = WebsocketPort;
+        var preferredWebsocketPort = _websocketPort;
         for (var i = 0; i < 100; i++)
         {
             try
             {
-                WebsocketPort = preferredWebsocketPort + i;
+                _websocketPort = preferredWebsocketPort + i;
 
-                _webSocketServer = new WebSocketServer($"{WebsocketAddress}:{WebsocketPort}");
+                _webSocketServer = new WebSocketServer($"{_websocketAddress}:{_websocketPort}");
                 _webSocketServer.AddWebSocketService<WebSocketRequestBehaviour>("/");
                 _webSocketServer.Start();
 
@@ -52,9 +52,26 @@ public class ModMain : MelonMod
         }
     }
 
+    public override void OnApplicationQuit()
+    {
+        CloseWebsocket();
+    }
+
+    public override void OnDeinitializeMelon()
+    {
+        CloseWebsocket();
+    }
+
+    private void CloseWebsocket()
+    {
+        _webSocketServer?.RemoveWebSocketService("/");
+
+        _webSocketServer?.Stop();
+    }
+
     public static void OpenGps()
     {
         Application.OpenURL(
-            $"https://shalazam.info/maps/1?gps_websocket_url={WebsocketAddress}:{WebsocketPort}&gps_websocket_interval={RefreshInterval}&zoom=8&x={(int)Globals.LocalPlayer!.transform.position.x}&y={(int)Globals.LocalPlayer.transform.position.z}");
+            $"https://shalazam.info/maps/1?gps_websocket_url={_websocketAddress}:{_websocketPort}&gps_websocket_interval={_refreshInterval}&zoom=8&x={(int)Globals.LocalPlayer!.transform.position.x}&y={(int)Globals.LocalPlayer.transform.position.z}");
     }
 }

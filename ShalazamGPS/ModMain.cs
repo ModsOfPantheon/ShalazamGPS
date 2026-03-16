@@ -10,7 +10,6 @@ public class ModMain : MelonMod
     private WebSocketServer? _webSocketServer;
     private static string _websocketAddress;
     private static int _websocketPort;
-    private static int _refreshInterval;
     
     public const string PluginVersion = "1.1.0";
     
@@ -19,7 +18,6 @@ public class ModMain : MelonMod
         var category = MelonPreferences.CreateCategory("ShalazamGPS");
         _websocketAddress = category.CreateEntry("WebsocketUrl", "ws://localhost").Value;
         _websocketPort = category.CreateEntry("SocketPort", 3000).Value;
-        _refreshInterval = category.CreateEntry("RefreshInterval", 100).Value;
         
         category.SaveToFile(false);
 
@@ -72,6 +70,6 @@ public class ModMain : MelonMod
     public static void OpenGps()
     {
         Application.OpenURL(
-            $"https://shalazam.info/maps/1?gps_websocket_url={_websocketAddress}:{_websocketPort}&gps_websocket_interval={_refreshInterval}&zoom=8&x={(int)Globals.LocalPlayer!.transform.position.x}&y={(int)Globals.LocalPlayer.transform.position.z}");
+            $"https://shalazam.info/maps/1?gps_websocket_url={_websocketAddress}:{_websocketPort}&zoom=8&x={(int)Globals.LocalPlayer!.transform.position.x}&y={(int)Globals.LocalPlayer.transform.position.z}");
     }
 }
